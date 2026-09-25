@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>行程攻略模板 | Travel Guide Template</title>
+<meta name="description" content="旅游攻略单文件模板：倒计时 + 逐日时间轴 + 今天吃什么 + 待办清单">
+<style>
+:root{
+  --bg:#f2f6fa; --card:#ffffff; --card2:#f7fafd;
+  --text:#16212e; --text2:#5a6b7d; --text3:#8a99a8;
+  --line:#e2eaf2; --line2:#d3dfea;
+  --sea:#1b7fbd; --sea-l:#e8f4fb; --sea-d:#0f5f91;
+  --orange:#e4744a; --orange-l:#fdf0ea;
+  --green:#2f9e6e; --green-l:#e9f7f0;
+  --gold:#c9932a; --gold-l:#fdf6e6;
+  --red:#d9534f;
+  --shadow:0 1px 2px rgba(20,40,60,.04),0 6px 20px rgba(20,40,60,.06);
+  --shadow-lg:0 2px 6px rgba(20,40,60,.06),0 16px 40px rgba(20,40,60,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0d1319; --card:#161f28; --card2:#1b2632;
+    --text:#e7eef5; --text2:#9dafc0; --text3:#6f8296;
+    --line:#25323f; --line2:#2e3d4c;
+    --sea:#4aa9e0; --sea-l:#132b3c; --sea-d:#7cc4ec;
+    --orange:#f0895f; --orange-l:#33221a;
+    --green:#4dbb8a; --green-l:#12291f;
+    --gold:#e0b158; --gold-l:#2c2415;
+    --red:#e8776f;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
+    --shadow-lg:0 2px 6px rgba(0,0,0,.35),0 16px 40px rgba(0,0,0,.4);
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--text);font-size:15px;line-height:1.65;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+  padding-bottom:60px;}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+
+/* 顶部 */
+.hero{background:linear-gradient(150deg,var(--sea-d) 0%,var(--sea) 52%,#3aa0d8 100%);
+  color:#fff;padding:32px 16px 76px;position:relative;overflow:hidden;}
+.hero::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-46px;height:110px;
+  background:var(--bg);border-radius:50% 50% 0 0;}
+.hero-inner{max-width:760px;margin:0 auto;position:relative;z-index:2}
+.tag{display:inline-block;font-size:12px;letter-spacing:.14em;background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.3);padding:4px 12px;border-radius:100px;margin-bottom:14px}
+.hero h1{margin:0 0 6px;font-size:29px;line-height:1.25;font-weight:700;letter-spacing:-.01em}
+.hero p{margin:0;opacity:.85;font-size:14px}
+
+/* 倒计时 */
+.countdown{margin-top:-52px;position:relative;z-index:3;background:var(--card);border-radius:20px;
+  padding:22px 20px;box-shadow:var(--shadow-lg);text-align:center;border:1px solid var(--line)}
+.cd-label{font-size:13px;color:var(--text2);letter-spacing:.05em;margin-bottom:10px}
+.cd-nums{display:flex;justify-content:center;gap:10px;align-items:flex-start}
+.cd-cell{min-width:64px}
+.cd-num{font-size:34px;font-weight:700;line-height:1;color:var(--sea);
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.cd-unit{font-size:11px;color:var(--text3);margin-top:5px;letter-spacing:.1em}
+.cd-sep{font-size:26px;color:var(--line2);font-weight:300;line-height:1.25}
+.cd-note{margin-top:14px;font-size:13px;color:var(--text2);padding-top:14px;border-top:1px dashed var(--line)}
+.cd-note b{color:var(--orange)}
+
+/* 概览格 */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;
+  text-align:center;box-shadow:var(--shadow)}
+.stat .v{font-size:17px;font-weight:700;line-height:1.3}
+.stat .k{font-size:11px;color:var(--text3);margin-top:4px;letter-spacing:.06em}
+
+/* 区块 */
+section{margin-top:30px}
+.sec-h{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+.sec-h .ico{width:30px;height:30px;border-radius:9px;background:var(--sea-l);color:var(--sea);
+  display:grid;place-items:center;font-size:15px;font-weight:700;flex:0 0 auto}
+.sec-h h2{margin:0;font-size:18px;font-weight:700}
+.sec-h .sub{margin-left:auto;font-size:12px;color:var(--text3);text-align:right}
+
+/* 逐日卡片 */
+.day{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  margin-bottom:12px;overflow:hidden}
+.day-h{display:flex;align-items:center;gap:13px;padding:15px 18px;cursor:pointer}
+.day-d{flex:0 0 auto;width:46px;height:46px;border-radius:12px;
+  background:linear-gradient(140deg,var(--sea),var(--sea-d));color:#fff;display:grid;place-items:center;line-height:1}
+.day-d .d1{font-size:10px;opacity:.85;letter-spacing:.06em}
+.day-d .d2{font-size:17px;font-weight:700;margin-top:1px}
+.day-t{flex:1;min-width:0}
+.day-t .t1{font-weight:700;font-size:15.5px}
+.day-t .t2{font-size:12.5px;color:var(--text3);margin-top:2px}
+.day-arrow{color:var(--text3);font-size:12px;transition:transform .25s}
+.day.open .day-arrow{transform:rotate(180deg)}
+.day-b{display:none;padding:0 18px 18px;border-top:1px dashed var(--line)}
+.day.open .day-b{display:block}
+
+/* 时间轴 */
+.stop{display:flex;gap:12px;padding:11px 0;position:relative}
+.stop+.stop{border-top:1px solid var(--line)}
+.stop-l{flex:0 0 auto;width:52px;text-align:right;font-size:12px;color:var(--text3);
+  font-variant-numeric:tabular-nums;padding-top:1px}
+.stop-r{flex:1;min-width:0}
+.stop-r .sn{font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stop-r .sd{font-size:13px;color:var(--text2);margin-top:3px}
+.nav{font-size:11.5px;color:var(--sea);text-decoration:none;border:1px solid var(--sea);
+  padding:1px 8px;border-radius:100px;white-space:nowrap;font-weight:500}
+.nav:hover{background:var(--sea);color:#fff}
+
+/* 今天吃什么 */
+.eat{margin-top:14px;border:1px solid var(--gold);background:var(--gold-l);border-radius:12px;padding:13px 14px}
+.eat-h{font-size:13.5px;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.eat-h .e-tag{font-size:10.5px;font-weight:500;color:var(--text3);background:var(--card);
+  padding:1px 7px;border-radius:100px;margin-left:auto}
+.eat-row{display:flex;gap:9px;padding:8px 0;border-top:1px dashed rgba(201,147,42,.35);font-size:13px}
+.eat-row:first-of-type{border-top:0;padding-top:2px}
+.eat-when{flex:0 0 auto;width:44px;font-size:11.5px;color:var(--text3);padding-top:2px}
+.eat-body{flex:1;min-width:0}
+.eat-store{font-weight:700}
+.eat-price{font-weight:600;color:var(--orange);font-variant-numeric:tabular-nums;font-size:12.5px;margin-left:5px}
+.eat-dish{color:var(--text2);display:block;margin-top:2px}
+
+/* 提醒 & 住宿 */
+.day-f{margin-top:12px;background:var(--card2);border-radius:10px;padding:10px 12px;
+  font-size:12.5px;color:var(--text2)}
+.day-f b{color:var(--text)}
+
+/* 待办 */
+.todo-item{display:flex;gap:11px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}
+.todo-item:first-child{border-top:0}
+.todo-box{flex:0 0 auto;width:19px;height:19px;border:1.8px solid var(--line2);border-radius:6px;margin-top:2px}
+.todo-item.done .todo-box{background:var(--green);border-color:var(--green)}
+.todo-item.done .todo-t{opacity:.5;text-decoration:line-through}
+.todo-t{flex:1;font-size:13.5px}
+.todo-t .m{display:block;font-size:12.5px;color:var(--text3);margin-top:3px}
+.todo-t .m.hot{color:var(--orange)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="tag">TRAVEL GUIDE</span>
+    <h1>{{目的地}} · {{天数}}日亲子行攻略</h1>
+    <p>{{日期范围}} ｜ {{人数}}</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="countdown">
+    <div class="cd-label">距出发还有</div>
+    <div class="cd-nums">
+      <div class="cd-cell"><div class="cd-num" id="cdD">--</div><div class="cd-unit">天</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-cell"><div class="cd-num" id="cdH">--</div><div class="cd-unit">时</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-cell"><div class="cd-num" id="cdM">--</div><div class="cd-unit">分</div></div>
+    </div>
+    <div class="cd-note" id="cdNote">出发前记得再核对一遍航班与酒店</div>
+  </div>
+
+  <div class="grid3" id="stats"></div>
+
+  <section>
+    <div class="sec-h"><div class="ico">日</div><h2>逐日行程</h2>
+      <span class="sub">点标题展开 · 右侧可导航</span></div>
+    <div id="days"></div>
+  </section>
+
+  <section>
+    <div class="sec-h"><div class="ico">✓</div><h2>出行待办</h2>
+      <span class="sub" id="todoCount"></span></div>
+    <div id="todos"></div>
+  </section>
+</div>
+
+<script>
+/* ============ 1. 基础信息 ============ */
+var TRIP = {
+  startDate: '2026-10-01T00:00:00+08:00',   // 出发时刻，用于倒计时
+  stats: [                                   // 顶部三格
+    { v: '7天6晚', k: '行程' },
+    { v: '2大1小', k: '出行' },
+    { v: '4座城', k: '城市' }
+  ]
+};
+
+/* ============ 2. 逐日行程 ============
+   d   日期编号（显示在左侧方块）      w   日期文字
+   t   当天标题                        s   副标题
+   f   当天住宿
+   stops[] 时间轴：tm 时间 / n 事件 / d 说明 / nav 高德搜索关键词（null 则不出导航按钮）
+   eat[]   今天吃什么：w 时段 / n 店名 / p 人均 / d 招牌菜与备注
+   alt     提醒（可选）
+*/
+var DAYS = [
+  {
+    d:'01', w:'10月1日 周四', t:'抵达 · 老城安顿', s:'落地 → 酒店 → 街区夜市',
+    f:'住 示例酒店（含早 2 份）',
+    stops:[
+      {tm:'07:40', n:'航班起飞', d:'直飞 2 小时 55 分，含餐食', nav:null},
+      {tm:'10:35', n:'落地，打车去酒店', d:'车程约 20 分钟，先寄存行李', nav:'机场'},
+      {tm:'12:00', n:'午餐 · 酒店周边', d:'别折腾去远处，就近解决', nav:'示例酒店'},
+      {tm:'13:30', n:'午休', d:'早班机后补觉，不然后面几天全废', nav:'示例酒店'},
+      {tm:'16:00', n:'老城步行 · 看日落', d:'步行可达，傍晚光线最好', nav:'老城区'},
+      {tm:'18:30', n:'晚餐 · 本地街区', d:'见下方「今天吃什么」', nav:'老城区'}
+    ],
+    eat:[
+      {w:'中午', n:'酒店周边小馆', p:'¥26–77', d:'落地后最省事的选择'},
+      {w:'晚上', n:'本地老店', p:'¥20–40', d:'招牌菜写在 d 字段里'},
+      {w:'加餐', n:'街边小吃街', p:'¥5–25', d:'营业时间写清楚，避免扑空'}
+    ],
+    alt:'若航班延误超过 2 小时，直接砍掉下午的景点，把晚餐提前。'
+  },
+  {
+    d:'02', w:'10月2日 周五', t:'核心景点日', s:'早起避人流 · 下午室内 · 夜游',
+    f:'住 示例民宿',
+    stops:[
+      {tm:'08:00', n:'早餐后出发', d:'含早 2 份，孩子超 1.2m 可能需补费', nav:'示例酒店'},
+      {tm:'09:30', n:'主要景点', d:'⚠️ 提前在小程序预约，带证件原件', nav:'主要景点'},
+      {tm:'12:30', n:'午餐', d:'景区内偏贵，走外面巷子更实在', nav:null},
+      {tm:'14:30', n:'室内展馆', d:'最热的时段躲进有空调的地方', nav:'博物馆'},
+      {tm:'17:30', n:'看日落', d:'秋季日落约 17:50–18:20', nav:'观景点'},
+      {tm:'19:30', n:'晚餐 + 夜游', d:'游客散去后的街区才是它自己', nav:'老城区'}
+    ],
+    eat:[
+      {w:'早上', n:'酒店自助早餐', p:'含 2 份', d:'1.2m 以下儿童通常免费'},
+      {w:'中午', n:'巷内小吃', p:'¥40–70', d:'避开主街排队'},
+      {w:'晚上', n:'本地正餐', p:'¥60–100', d:'招牌菜列在这里'}
+    ],
+    alt:'若主要景点门票抢不到，改去备选景点，行程顺序不变。'
+  },
+  {
+    d:'03', w:'10月3日 周六', t:'返程日', s:'上午收尾 · 午后去机场',
+    f:'返程',
+    stops:[
+      {tm:'09:00', n:'早餐 + 收拾行李', d:'检查证件和充电器', nav:null},
+      {tm:'10:30', n:'最后一站', d:'别安排太远的点，留足机动时间', nav:null},
+      {tm:'11:00', n:'出发去机场', d:'按「起飞前 3 小时」倒推，国庆再加 30 分钟', nav:'机场'},
+      {tm:'13:55', n:'航班起飞', d:'经停航班注意中转时间', nav:null},
+      {tm:'18:15', n:'落地，回家', d:'行李出来约 30 分钟', nav:'机场'}
+    ],
+    eat:[
+      {w:'早上', n:'酒店早餐', p:'含 2 份', d:'退房前吃完'},
+      {w:'中午', n:'机场餐厅', p:'¥30–60', d:'安检后再吃，别在外面耽误'}
+    ],
+    alt:'返程航班若不含免费托运行李额，提前在线购买比柜台便宜。'
+  }
+];
+
+/* ============ 3. 待办清单 ============ */
+var TODOS = [
+  {t:'打电话确认酒店接送/加早等细节', m:'房型、含早份数、免费取消截止时间都问一遍。', hot:true},
+  {t:'需要预约的景点逐个约好', m:'写清小程序名称 + 放票时间 + 是否需要身份证原件。'},
+  {t:'抢票类事项（船票/索道/演出）', m:'标住开售时间和捡漏时段。', hot:true},
+  {t:'证件', m:'大人身份证 + 孩子户口本原件（不是照片、不是复印件）。'},
+  {t:'打包行李', m:'防晒、驱蚊、泳衣、薄外套、雨具、常用药、充电宝。'}
+];
+
+/* ============ 渲染（一般不用改） ============ */
+(function () {
+  // 倒计时
+  (function () {
+    function tick() {
+      var t = new Date(TRIP.startDate).getTime() - Date.now();
+      if (isNaN(t)) return;
+      var el = document.getElementById('cdD'); if (!el) return;
+      if (t <= 0) { el.parentElement.parentElement.innerHTML = '<div class="cd-label">行程进行中</div>'; return; }
+      document.getElementById('cdD').textContent = Math.floor(t / 86400000);
+      document.getElementById('cdH').textContent = String(Math.floor(t % 86400000 / 3600000)).padStart(2, '0');
+      document.getElementById('cdM').textContent = String(Math.floor(t % 3600000 / 60000)).padStart(2, '0');
+    }
+    tick(); setInterval(tick, 30000);
+  })();
+
+  // 概览格
+  var st = document.getElementById('stats');
+  if (st && TRIP.stats) {
+    TRIP.stats.forEach(function (s) {
+      var d = document.createElement('div');
+      d.className = 'stat';
+      d.innerHTML = '<div class="v">' + s.v + '</div><div class="k">' + s.k + '</div>';
+      st.appendChild(d);
+    });
+  }
+
+  // 逐日
+  var box = document.getElementById('days');
+  DAYS.forEach(function (day) {
+    var el = document.createElement('div');
+    el.className = 'day';
+
+    var stops = day.stops.map(function (s) {
+      var nav = s.nav
+        ? '<a class="nav" href="https://uri.amap.com/search?keyword=' + encodeURIComponent(s.nav) + '&src=travel" target="_blank" rel="noopener">导航</a>'
+        : '';
+      return '<div class="stop"><div class="stop-l">' + s.tm + '</div>'
+        + '<div class="stop-r"><div class="sn">' + s.n + nav + '</div>'
+        + '<div class="sd">' + s.d + '</div></div></div>';
+    }).join('');
+
+    var eatHtml = '';
+    if (day.eat && day.eat.length) {
+      eatHtml = '<div class="eat"><div class="eat-h">🍜 今天吃什么<span class="e-tag">店名 · 人均</span></div>'
+        + day.eat.map(function (e) {
+          return '<div class="eat-row"><div class="eat-when">' + e.w + '</div>'
+            + '<div class="eat-body"><span class="eat-store">' + e.n + '</span>'
+            + '<span class="eat-price">' + e.p + '</span>'
+            + '<span class="eat-dish">' + e.d + '</span></div></div>';
+        }).join('') + '</div>';
+    }
+
+    var alt = day.alt ? '<div class="day-f"><b>💡 提醒：</b>' + day.alt + '</div>' : '';
+
+    el.innerHTML = '<div class="day-h">'
+      + '<div class="day-d"><div class="d1">DAY</div><div class="d2">' + day.d + '</div></div>'
+      + '<div class="day-t"><div class="t1">' + day.t + '</div><div class="t2">' + day.w + ' · ' + day.s + '</div></div>'
+      + '<div class="day-arrow">▼</div></div>'
+      + '<div class="day-b">' + stops + eatHtml + alt + '<div class="day-f"><b>🏨 ' + day.f + '</b></div></div>';
+
+    el.querySelector('.day-h').addEventListener('click', function () { el.classList.toggle('open'); });
+    box.appendChild(el);
+  });
+
+  // 待办
+  (function () {
+    var tbox = document.getElementById('todos');
+    var KEY = 'travel_todo_v1';
+    var state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { }
+    TODOS.forEach(function (item, i) {
+      var el = document.createElement('div');
+      el.className = 'todo-item' + (state[i] ? ' done' : '');
+      el.innerHTML = '<div class="todo-box"></div><div class="todo-t">' + item.t
+        + (item.m ? '<span class="m' + (item.hot ? ' hot' : '') + '">' + item.m + '</span>' : '') + '</div>';
+      el.addEventListener('click', function () {
+        state[i] = !state[i];
+        el.classList.toggle('done', !!state[i]);
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { }
+        count();
+      });
+      tbox.appendChild(el);
+    });
+    function count() {
+      var n = Object.keys(state).filter(function (k) { return state[k]; }).length;
+      document.getElementById('todoCount').textContent = n + ' / ' + TODOS.length + ' 已完成';
+    }
+    count();
+  })();
+
+  // 默认展开第一天
+  if (box.firstChild) box.firstChild.classList.add('open');
+})();
+</script>
+</body>
+</html>
